@@ -28,6 +28,15 @@ func xor(args []string) string {
 }
 
 func main() {
-	bin := flag.Bool("b", true, "treats binary arguments as binary values")
-	fmt.Println(xor(os.Args[1:]))
+	//bin := flag.Bool("b", true, "treats binary arguments as binary values")
+	file := flag.String("f", "string", "accepts files as arguments")
+	flag.Parse()
+	fmt.Println(*file)
+	text, err := os.Open(*file)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println(*text)
+	}
+	fmt.Println(xor(flag.Args()))
 }
