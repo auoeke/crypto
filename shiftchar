@@ -1,0 +1,25 @@
+#!/bin/bash
+original=$(printf "%d" \'$1)
+
+if (( original >= 65 )) && (( original <= 90 ))
+then
+    start=65
+elif (( original >= 97 )) && (( original <= 122 ))
+then
+    start=97
+else
+    echo $1
+
+    return
+fi
+
+let "amount=($(printf "%d" \'${2^^}) - 65) % 26"
+let new="$original + $amount"
+
+if (( new >= start + 26 ))
+then
+    let "new -= 26"
+fi
+
+printf "\x$(printf %x $new)"
+

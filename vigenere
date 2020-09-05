@@ -1,36 +1,10 @@
 #!/bin/bash
-function applyShift {
-    original=$(printf "%d" \'$1)
-
-    if (( original >= 65 )) && (( original <= 90 ))
-    then
-        start=65
-    elif (( original >= 97 )) && (( original <= 122 ))
-    then
-        start=97
-    else
-        shifted=$1
-
-        return
-    fi
-
-    let "amount=($(printf "%d" \'${2^^}) - 65) % 26"
-    let new="$original + $amount"
-
-    if (( new >= start + 26 ))
-    then
-        let "new -= 26"
-    fi
-
-    shifted=$(printf "\x$(printf %x $new)")
-}
-
 j=0
 
 for ((i = 0; i < ${#1}; i++))
 do
-    applyShift "${1:i:1}" "${2:j:1}"
-    ciphertext+=$shifted
+    
+    ciphertext+=$(./shiftchar "${1:i:1}" "${2:j:1}")
     let "j++"
 
     if [[ $j == ${#2} ]]
