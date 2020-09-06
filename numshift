@@ -8,9 +8,9 @@ elif (( original >= 97 )) && (( original <= 122 ))
 then
     start=97
 else
-    echo $1
+    echo "${1}"
 
-    exit
+    exit 1
 fi
 
 let new="$original + $2"
