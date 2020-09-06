@@ -10,11 +10,10 @@ then
 else
     echo $1
 
-    return
+    exit
 fi
 
-let "amount=($(printf "%d" \'${2^^}) - 65) % 26"
-let new="$original + $amount"
+let new="$original + $2"
 
 if (( new >= start + 26 ))
 then
