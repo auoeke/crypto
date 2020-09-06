@@ -9,8 +9,6 @@ do
     then
         let "j++"
 
-        echo yes
-
         if (( j == ${#2} ))
         then
             j=0
