@@ -1,19 +1,27 @@
-#!/bin/bash
-j=0
+#!node
+const charshift = require("./charshift").charshift;
+const validate = require("./numshift").validate;
 
-for ((i = 0; i < ${#1}; i++))
-do
-    ciphertext+=$($(dirname "${0}")/charshift "${1:i:1}" "${2:j:1}")
+exports.vigenere = function(text, key) {
+    let ciphertext = "";
+    let j = 0;
 
-    if [[ $? == 0 ]]
-    then
-        let "j++"
+    for (const char of text) {
+        ciphertext += charshift(char, key[j]);
 
-        if (( j == ${#2} ))
-        then
-            j=0
-        fi
-    fi
-done
+        if (validate(char)) {
+            j = (j + 1) % key.length;
+        }
+    }
 
-echo "${ciphertext}"
+    return ciphertext;
+}
+
+if (require.main === module) {
+    if (process.argv.length < 4) {
+        throw `need 2 arguments instead of ${process.argv.length - 2}`;
+    }
+
+    console.log(exports.vigenere(process.argv[2], process.argv[3]));
+}
+

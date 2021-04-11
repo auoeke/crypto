@@ -1,3 +1,15 @@
-#!/bin/bash
-$(dirname "${0}")/numshift "${1}" "$((($(printf "%d" \'${2^^}) - 65) % 26))"
+#!node
+const numshift = require("./numshift").numshift;
+
+exports.charshift = function(char, shift) {
+    return numshift(char, (shift.toUpperCase().charCodeAt() - 65) % 26);
+}
+
+if (require.main === module) {
+    if (process.argv.length < 4) {
+        throw `required 2 arguments instead of ${process.argv.length - 2}`;
+    }
+
+    console.log(exports.charshift(process.argv[2], process.argv[3]));
+}
 

@@ -1,9 +1,27 @@
-#!/bin/bash
-j=0
+#!node
+const numshift = require("./numshift").numshift;
 
-for i in $(seq 0 ${#1})
-do
-    ciphertext+=$(./numshift "${1:i:1}" $2)
-done
+exports.caesar = function(text, shift) {
+    shift = Number(shift);
 
-echo "${ciphertext}"
+    if (shift === NaN) {
+        throw "shift is not a number";
+    }
+
+    let ciphertext = "";
+
+    for (const char of process.argv[2]) {
+        ciphertext += numshift(char, process.argv[3]);
+    }
+
+    return ciphertext;
+}
+
+if (require.main === module) {
+    if (process.argv.length < 4) {
+        throw `need 2 arguments instead of ${process.argv.length - 2}`;
+    }
+
+    console.log(exports.caesar(process.argv[2], process.argv[3]));
+}
+

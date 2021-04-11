@@ -1,24 +1,50 @@
-#!/bin/bash
-original=$(printf "%d" \'$1)
+#!node
+exports.validate = function(char) {
+    if (typeof char == "string") {
+        checkCharLength(char);
 
-if (( original >= 65 )) && (( original <= 90 ))
-then
-    start=65
-elif (( original >= 97 )) && (( original <= 122 ))
-then
-    start=97
-else
-    echo "${1}"
+        char = char.charCodeAt();
+    }
 
-    exit 1
-fi
+    return char >= 65 && char <= 90 || char >= 97 && char <= 122;
+}
 
-let new="$original + $2"
+exports.numshift = function(char, shift) {
+    checkCharLength(char);
 
-if (( new >= start + 26 ))
-then
-    let "new -= 26"
-fi
+    shift = Number(shift);
 
-printf "\x$(printf %x $new)"
+    if (shift === NaN) {
+        throw "shift is not a number";
+    }
+
+    const original = char.charCodeAt();
+    let start;
+
+    if (original >= 65 && original <= 90) {
+        start = 65;
+    } else if (original >= 97 && original <= 122) {
+        start = 97;
+    } else {
+        return char;
+    }
+
+    let noo = original + shift;
+
+    if (noo >= start + 26) {
+        noo -= 26;
+    }
+
+    return String.fromCharCode(noo);
+}
+
+function checkCharLength(char) {
+    if (char.length != 1) {
+        throw `length of "char" argument "${char}" is not 1`;
+    }
+}
+
+if (require.main === module) {
+    console.log(exports.numshift(process.argv[2], process.argv[3]));
+}
 
