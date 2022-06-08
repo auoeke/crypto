@@ -18,10 +18,19 @@ exports.vigenere = function(text, key) {
 }
 
 if (require.main === module) {
-    if (process.argv.length < 4) {
-        throw `need 2 arguments instead of ${process.argv.length - 2}`;
+    const argv = process.argv;
+    argv.splice(0, 2);
+
+    if (argv.length < 2) {
+        throw `need at least 2 arguments instead of ${argv.length - 2}`;
     }
 
-    console.log(exports.vigenere(process.argv[2], process.argv[3]));
+    let result = argv.shift();
+
+    for (let key = argv.shift(); key != null; key = argv.shift()) {
+        result = exports.vigenere(result, key);
+    }
+
+    process.stdout.write(result);
 }
 
